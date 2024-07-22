@@ -1,0 +1,16 @@
+{
+    "name": "NacoClip",
+    "short_name": "NacoClip",
+    "description": "A clipboard manager and notepad application",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#1E1E1E",
+    "theme_color": "#1E1E1E",
+    "icons": [
+      {
+        "src": "/favicon.ico",
+        "sizes": "192x192",
+        "type": "image/ico"
+      }
+    ]
+  }
