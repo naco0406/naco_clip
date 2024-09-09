@@ -32,7 +32,7 @@ const Notepad: React.FC<NotepadProps> = ({ notepadContent, setNotepadContent }) 
         <CardHeader>
             <h2 className="text-2xl font-bold text-white">Notepad</h2>
         </CardHeader>
-        <CardContent className="flex-grow p-2">
+        <CardContent className="flex-grow p-2 h-full">
             <div className="h-full">
                 <ReactQuill
                     theme="snow"
@@ -40,7 +40,7 @@ const Notepad: React.FC<NotepadProps> = ({ notepadContent, setNotepadContent }) 
                     onChange={setNotepadContent}
                     modules={modules}
                     formats={formats}
-                    className="h-full bg-[#2D2D2D] text-white rounded-lg"
+                    className="h-full bg-[#2D2D2D] text-white rounded-lg min-h-[202px]"
                 />
             </div>
         </CardContent>

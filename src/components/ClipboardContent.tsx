@@ -17,14 +17,14 @@ type ClipboardContentProps = {
 };
 
 const ClipboardContent: React.FC<ClipboardContentProps> = ({ items, copyToClipboard, deleteItem }) => (
-    <Card className="flex flex-col h-full m-6 bg-[#2D2D2D] overflow-hidden rounded-lg">
+    <Card className="flex flex-col h-full m-6 bg-[#2D2D2D] overflow-hidden rounded-lg min-h-[300px]">
         <CardHeader>
             <h2 className="text-2xl font-bold text-white">Clipboard</h2>
         </CardHeader>
         <CardContent className="flex-grow overflow-y-auto">
             {items.length === 0 ? (
                 <div className="flex flex-col items-center justify-center h-full text-white">
-                    <ClipboardX className="w-16 h-16 mb-4" />
+                    <ClipboardX className="w-16 h-16 mb-4 mt-10" />
                     <p>Clipboard is empty</p>
                 </div>
             ) : (
@@ -32,7 +32,7 @@ const ClipboardContent: React.FC<ClipboardContentProps> = ({ items, copyToClipbo
                     {items.map((item, index) => (
                         <Card
                             key={index}
-                            className="shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 bg-[#1E1E1E] animate-fadeIn cursor-pointer relative min-h-[100px] rounded-lg"
+                            className="shadow-md hover:shadow-lg transition-all duration-300 transform bg-[#1E1E1E] animate-fadeIn cursor-pointer relative min-h-[100px] rounded-lg"
                             onClick={() => copyToClipboard(item)}
                         >
                             <CardContent className="flex items-center p-4 h-full">

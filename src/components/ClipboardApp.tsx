@@ -5,6 +5,7 @@ import { useLocalStorage } from '@/hooks/useLocalStorage';
 import { useWindowWidth } from '@/hooks/useWindowWidth';
 import Header from '@/components/Header';
 import ClipboardContent from '@/components/ClipboardContent';
+import { Resizable } from 're-resizable';
 
 const Notepad = dynamic(() => import('@/components/Notepad'), { ssr: false });
 
@@ -23,6 +24,7 @@ const ClipboardApp = () => {
     const fileInputRef = useRef<HTMLInputElement>(null);
     const windowWidth = useWindowWidth();
     const [isClient, setIsClient] = useState(false);
+    const [clipboardWidth, setClipboardWidth] = useState(windowWidth > 1128 ? windowWidth / 2 : windowWidth);
 
     useEffect(() => {
         setIsClient(true);
@@ -39,6 +41,10 @@ const ClipboardApp = () => {
             window.removeEventListener('paste', handleGlobalPaste);
         };
     }, []);
+
+    useEffect(() => {
+        setClipboardWidth(windowWidth > 1128 ? windowWidth / 2 : windowWidth);
+    }, [windowWidth]);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -141,19 +147,49 @@ const ClipboardApp = () => {
                 fileInputRef={fileInputRef}
                 handleFileUpload={handleFileUpload}
             />
-            <div className={`flex flex-1 ${windowWidth > 1128 ? 'flex-row' : 'flex-col'} mt-20 px-2`}>
-                <div className={`flex-1 ${windowWidth > 768 && windowWidth <= 1128 ? 'max-w-3xl mx-auto w-full' : ''}`}>
-                    <ClipboardContent
-                        items={items}
-                        copyToClipboard={copyToClipboard}
-                        deleteItem={deleteItem}
-                    />
-                </div>
-                {windowWidth > 1128 && (
-                    <div className="flex-1">
-                        <Notepad
-                            notepadContent={notepadContent}
-                            setNotepadContent={setNotepadContent}
+            <div className="flex flex-1 mt-20 px-2 overflow-hidden h-full">
+                {windowWidth > 1128 ? (
+                    <>
+                        <Resizable
+                            size={{ width: clipboardWidth, height: '100%' }}
+                            onResizeStop={(e, direction, ref, d) => {
+                                setClipboardWidth(clipboardWidth + d.width);
+                            }}
+                            minWidth={300}
+                            maxWidth={windowWidth - 300}
+                            enable={{ right: true }}
+                            handleStyles={{
+                                right: {
+                                    width: '2px',
+                                    right: '-1px',
+                                }
+                            }}
+                            handleClasses={{
+                                right: 'bg-transparent hover:bg-gray-500 transition-colors min-h-screen'
+                            }}
+                            className='h-full overflow-hidden'
+                        >
+                            <div className="h-full overflow-auto">
+                                <ClipboardContent
+                                    items={items}
+                                    copyToClipboard={copyToClipboard}
+                                    deleteItem={deleteItem}
+                                />
+                            </div>
+                        </Resizable>
+                        <div style={{ width: windowWidth - clipboardWidth }} className="h-full overflow-auto">
+                            <Notepad
+                                notepadContent={notepadContent}
+                                setNotepadContent={setNotepadContent}
+                            />
+                        </div>
+                    </>
+                ) : (
+                    <div className="w-full h-full overflow-auto">
+                        <ClipboardContent
+                            items={items}
+                            copyToClipboard={copyToClipboard}
+                            deleteItem={deleteItem}
                         />
                     </div>
                 )}
