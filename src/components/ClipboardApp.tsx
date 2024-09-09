@@ -28,23 +28,7 @@ const ClipboardApp = () => {
 
     useEffect(() => {
         setIsClient(true);
-
-        // Add global paste event listener
-        const handleGlobalPaste = (e: ClipboardEvent) => {
-            handlePaste(e as unknown as React.ClipboardEvent);
-        };
-
-        window.addEventListener('paste', handleGlobalPaste);
-
-        // Clean up the event listener on component unmount
-        return () => {
-            window.removeEventListener('paste', handleGlobalPaste);
-        };
     }, []);
-
-    useEffect(() => {
-        setClipboardWidth(windowWidth > 1128 ? windowWidth / 2 : windowWidth);
-    }, [windowWidth]);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
