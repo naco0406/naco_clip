@@ -4,17 +4,11 @@ import { useToast } from "@/components/ui/use-toast"
 import { useLocalStorage } from '@/hooks/useLocalStorage';
 import { useWindowWidth } from '@/hooks/useWindowWidth';
 import Header from '@/components/Header';
-import ClipboardContent from '@/components/ClipboardContent';
+import ClipboardContent, { ClipboardItemType } from '@/components/ClipboardContent';
 import { Resizable } from 're-resizable';
+import { v4 as uuidv4 } from 'uuid';
 
 const Notepad = dynamic(() => import('@/components/Notepad'), { ssr: false });
-
-type ClipboardItemType = {
-    type: 'text' | 'image' | 'file';
-    content: string;
-    name?: string;
-    size?: number;
-};
 
 const ClipboardApp = () => {
     const [items, setItems] = useLocalStorage<ClipboardItemType[]>('clipboardItems', []);
@@ -74,8 +68,9 @@ const ClipboardApp = () => {
         }
     };
 
-    const addItem = (newItem: ClipboardItemType) => {
-        setItems([newItem, ...items]);
+    const addItem = (newItem: Omit<ClipboardItemType, 'id'>) => {
+        const itemWithId = { ...newItem, id: uuidv4() };
+        setItems([itemWithId, ...items]);
         toast({
             title: "Item Added",
             description: `A new ${newItem.type === 'text' ? 'text' : newItem.type === 'image' ? 'image' : 'file'} has been added to the clipboard.`,
@@ -115,6 +110,13 @@ const ClipboardApp = () => {
             variant: "destructive",
             duration: 1000,
         });
+    };
+
+    const reorderItems = (startIndex: number, endIndex: number) => {
+        const newItems = Array.from(items);
+        const [reorderedItem] = newItems.splice(startIndex, 1);
+        newItems.splice(endIndex, 0, reorderedItem);
+        setItems(newItems);
     };
 
     if (!isClient) {
@@ -158,6 +160,7 @@ const ClipboardApp = () => {
                                     items={items}
                                     copyToClipboard={copyToClipboard}
                                     deleteItem={deleteItem}
+                                    reorderItems={reorderItems}
                                 />
                             </div>
                         </Resizable>
@@ -174,6 +177,7 @@ const ClipboardApp = () => {
                             items={items}
                             copyToClipboard={copyToClipboard}
                             deleteItem={deleteItem}
+                            reorderItems={reorderItems}
                         />
                     </div>
                 )}
