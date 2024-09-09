@@ -1,7 +1,7 @@
 import React from 'react';
 import { Clipboard, Trash2, File, ClipboardX, GripVertical } from 'lucide-react';
 import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
+import { Card, CardHeader, CardContent } from "@/components/ui/card"
 import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd';
 
 export type ClipboardItemType = {
@@ -30,6 +30,9 @@ const ClipboardContent: React.FC<ClipboardContentProps> = ({ items, copyToClipbo
 
     return (
         <Card className="flex flex-col h-full m-6 bg-[#2D2D2D] overflow-hidden rounded-lg min-h-[300px]">
+            <CardHeader>
+                <h2 className="text-2xl font-bold text-white">Clipboard</h2>
+            </CardHeader>
             <CardContent className="flex-grow overflow-y-auto p-4">
                 {items.length === 0 ? (
                     <div className="flex flex-col items-center justify-center h-full text-white">
