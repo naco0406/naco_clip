@@ -141,7 +141,7 @@ const ClipboardApp = () => {
                 fileInputRef={fileInputRef}
                 handleFileUpload={handleFileUpload}
             />
-            <div className={`flex flex-1 ${windowWidth > 1128 ? 'flex-row' : 'flex-col'} mt-32 px-4`}>
+            <div className={`flex flex-1 ${windowWidth > 1128 ? 'flex-row' : 'flex-col'} mt-20 px-2`}>
                 <div className={`flex-1 ${windowWidth > 768 && windowWidth <= 1128 ? 'max-w-3xl mx-auto w-full' : ''}`}>
                     <ClipboardContent
                         items={items}
